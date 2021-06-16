@@ -45,7 +45,6 @@ def checking_for_user(update):
     username = update['message']['from']['username']
     with open('db.txt', 'r') as database:
         names = [name for name in database]
-        print(names)
         if username not in names:
             add_user_to_db(username)
 
