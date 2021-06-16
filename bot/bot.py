@@ -24,7 +24,6 @@ def get_chat_id(update):
 
 def get_message(update):
     """Getting message."""
-    print(update['message']['from']['username'], update['message']['text'])
     message = update['message']['text']
     return message
 
