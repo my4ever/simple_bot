@@ -7,32 +7,45 @@ TOKEN =
 url = f'https://api.telegram.org/bot{TOKEN}/'
 
 def get_updates_json(request):
-    """Getting update from server"""
+    """Getting update from server."""
     response = requests.get(request + 'getUpdates')
     return response.json()
 
 def last_update(data):
-    """Getting last update info"""
+    """Getting last update info."""
     results = data['result']
     total_updates = len(results) - 1
     return results[total_updates]
 
 def get_chat_id(update):
-    """Getting chat id"""
+    """Getting chat id."""
     chat_id = update['message']['chat']['id']
-    print(chat_id)
     return chat_id
 
 def get_message(update):
-    """Getting message"""
+    """Getting message."""
+    print(update)
     message = update['message']['text']
     return message
 
 def send_mess(chat, text):
-    """Sending the message"""
+    """Sending the message."""
     params = {'chat_id': chat, 'text': text}
     response = requests.post(url + 'sendMessage', data=params)
     return response
+
+def checking_for_user(update):
+    """Checking for username in database."""
+    username = update['message']['from']['username']
+    with open('db.txt', 'r') as database:
+        names = [ name.strip() for name in database]
+        if username not in names:
+            add_user_to_db(username)
+
+def add_user_to_db(username):
+    """Adding username into database."""
+    with open('db.txt', 'a') as database:
+        database.write('\n' + username)
 
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
@@ -40,6 +53,7 @@ def main():
         if update_id == last_update(get_updates_json(url))['update_id']:
            send_mess(get_chat_id(last_update(get_updates_json(url))),
                      get_message(last_update(get_updates_json(url))))
+           checking_for_user(last_update(get_updates_json(url)))
            update_id += 1
     sleep(1)
 
