@@ -73,14 +73,14 @@ class TelegramDB():
 		# connect or create DB
 		self.con = sqlite3.connect(os.path.join("db", "telegram.db"))
 		# manager class
-		for table_name in CREATE_TABLES_LIST:
+		for table in CREATE_TABLES_LIST:
 			self.cursor = self.con.cursor()
 			if self.cursor.execute(f"SELECT name FROM sqlite_master \
-								WHERE type='table' AND name='{table_name}'").fetchall():
+								WHERE type='table' AND name='{table}'").fetchall():
 				print("Its ok db exists")
 			else:
 				print("have to create Table")
-				self.cursor.execute(table_name)
+				self.cursor.execute(table)
 			print("connection closed")
 		self.con.close()
 
