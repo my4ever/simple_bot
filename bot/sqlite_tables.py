@@ -22,11 +22,11 @@ answer = ''' CREATE TABLE IF NOT EXISTS answer(
 user_answer = '''CREATE TABLE IF NOT EXISTS user_answer(
 				id INTEGER PRIMARY KEY,
 				userid INTEGER NOT NULL,
-				FOREIGN KEY (userid) REFERENCES user_instance (id),
-				answerid INTEGER NOT NULL,
-				FOREIGN KEY (answerid) REFERENCES answer (id),
 				questionid INTEGER NOT NULL,
-			    FOREIGN KEY (questionid) REFERENCES question (id)
+				answerid INTEGER NOT NULL,
+				FOREIGN KEY (userid) REFERENCES user_instance (id),
+			    FOREIGN KEY (questionid) REFERENCES question (id),
+				FOREIGN KEY (answerid) REFERENCES answer (id)
 				) '''
 
 CREATE_TABLES_LIST = [user_instance, question, answer, user_answer]
