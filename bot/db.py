@@ -77,9 +77,9 @@ class TelegramDB():
 			self.cursor = self.con.cursor()
 			if self.cursor.execute(f"SELECT name FROM sqlite_master \
 								WHERE type='table' AND name='{table_name}'").fetchall():
-				print(f"Its ok db {table_name} exists")
+				print("Its ok db exists")
 			else:
-				print(f"have to create Table: {table_name}")
+				print("have to create Table")
 				self.cursor.execute(table_name)
 			print("connection closed")
 		self.con.close()
