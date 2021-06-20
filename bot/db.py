@@ -75,8 +75,8 @@ class TelegramDB():
 		# manager class
 		for table in CREATE_TABLES_LIST:
 			self.cursor = self.con.cursor()
-			if self.cursor.execute(f"SELECT name FROM sqlite_master \
-								WHERE type='table' AND name='{table}'").fetchall():
+			if self.cursor.execute("SELECT name FROM sqlite_master "
+								  f"WHERE type='table' AND name='{table}'").fetchall():
 				print("Its ok db exists")
 			else:
 				print("have to create Table")

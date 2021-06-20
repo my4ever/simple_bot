@@ -4,7 +4,9 @@ user_instance = ''' CREATE TABLE IF NOT EXISTS user_instance(
 				    phone TEXT DEFAULT "",
 				    username TEXT NOT NULL,
 				    isadmin INTEGER DEFAULT 0,
-				    regestrydate TEXT DEFAULT  ""
+				    regestrydate TEXT DEFAULT  "",
+				    lastquestionid INTEGER NOT NULL,
+				    FOREIGN KEY (lastquestionid) REFERENCES question (id)
 				    ) '''
 
 question = ''' CREATE TABLE IF NOT EXISTS question(
@@ -22,11 +24,11 @@ answer = ''' CREATE TABLE IF NOT EXISTS answer(
 user_answer = '''CREATE TABLE IF NOT EXISTS user_answer(
 				id INTEGER PRIMARY KEY,
 				userid INTEGER NOT NULL,
-				questionid INTEGER NOT NULL,
 				answerid INTEGER NOT NULL,
+				questionid INTEGER NOT NULL,
 				FOREIGN KEY (userid) REFERENCES user_instance (id),
-			    FOREIGN KEY (questionid) REFERENCES question (id),
-				FOREIGN KEY (answerid) REFERENCES answer (id)
+				FOREIGN KEY (answerid) REFERENCES answer (id),
+			    FOREIGN KEY (questionid) REFERENCES question (id)				
 				) '''
 
 CREATE_TABLES_LIST = [user_instance, question, answer, user_answer]
