@@ -61,19 +61,9 @@
 # 	textanswer
 import os
 import sqlite3
-# from db_tables import CREATE_TABLES_LIST
 
+from sqlite_tables import CREATE_TABLES_LIST
 
-user_create = ''' CREATE TABLE IF NOT EXISTS user(
-				 id INTEGER PRIMARY KEY,
-				 telegramid TEXT NOT NULL UNIQUE,
-				 phone TEXT DEFAULT "",
-				 username TEXT NOT NULL,
-				 isadmin INTEGER DEFAULT 0,
-				 regestrydate TEXT DEFAULT  "") '''
-
-
-CREATE_TABLES_LIST = [user_create]
 
 class TelegramDB():
 
@@ -86,10 +76,11 @@ class TelegramDB():
 		self.cursor = self.con.cursor()
 		if self.cursor.execute("SELECT name FROM sqlite_master \
 							WHERE type='table' AND name='user'").fetchall():
-			print("Its ok db exisits")
+			print("Its ok db exists")
 		else:
 			print("have to create Tables")
-			self.cursor.execute(user_create)
+			for table in CREATE_TABLES_LIST:
+				self.cursor.execute(table)
 		print("connection closed")
 		self.con.close()
 
