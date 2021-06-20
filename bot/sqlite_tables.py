@@ -1,4 +1,4 @@
-user_instance = ''' CREATE TABLE IF NOT EXISTS user(
+user_instance = ''' CREATE TABLE IF NOT EXISTS user_instance(
                     id INTEGER PRIMARY KEY,
 				    telegramid TEXT NOT NULL UNIQUE,
 				    phone TEXT DEFAULT "",
