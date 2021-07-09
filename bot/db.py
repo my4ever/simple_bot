@@ -78,37 +78,45 @@ class TelegramDB():
 								  f"WHERE type='table' AND name='{table}'").fetchall():
 				print("Its ok db exists")
 			else:
-				print("have to create Table")
+				print(f"have to create Table {table}")
 				self.cursor.execute(table)
 			print("connection closed")
 		self.con.close()
 
-	def check_for_user(self, telegramid, username):
-		"""Checking for user status in database."""
-		users_list = self.cursor.execute('SELECT telegramid FROM user_instance')
-		if str(telegramid) not in users_list:
-			self.save_user(telegramid, username)
-		else:
-			self.check_for_answer(telegramid)
-
-
-	def check_for_answer(self, telegramid): # TODO: Закончик метод.
-		"""Checking for last answer that user have answered."""
-		answer = self.cursor.execute(
-			f'SELECT lastquestionid FROM user_instance WHERE telegramid={telegramid}'
-			)
-
-
-	def save_answer(self, telegramid, answer):
-		"""Saving answer into datebase."""
-		pass
-
-	def save_user(self, telegramid, username):
-		"""Adding user into database."""
-		self.cursor.execute(
-			f'INSERT INTO user_instance VALUES (?, ?)',({telegramid}, {username})
-				) 
-		self.con.commit()
-		self.check_for_answer(telegramid) # asking user a question. 
-
 TelegramDB()
+
+
+db = sqlite3.connect('./db/telegram.db')
+cursor = db.cursor()
+
+def check_on_update(updateid):
+	"""Checking on a new message."""
+	pass
+
+def check_for_user(telegramid, username):
+	"""Checking for user status in database."""
+	users_list = cursor.execute('SELECT telegramid FROM user_instance')
+	if str(telegramid) not in users_list:
+		save_user(telegramid, username)
+	else:
+		check_for_answer(telegramid)
+
+def save_user(telegramid, username):
+	"""Adding user into database."""
+	cursor.execute(
+		f'INSERT INTO user_instance VALUES (?, ?)',({telegramid}, {username})
+		) 
+	db.commit()
+	check_for_answer(telegramid) # asking user a question. 
+
+def check_for_answer(telegramid): # TODO: Закончить метод.
+	"""Checking for last answer that user have answered."""
+	answer = cursor.execute(
+		f'SELECT lastquestionid FROM user_instance WHERE telegramid={telegramid}'
+		)
+
+
+def save_answer(telegramid, answer):
+	"""Saving answer into datebase."""
+	pass
+
