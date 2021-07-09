@@ -16,6 +16,7 @@ def get_updates_json(request):
 
 def last_update(data):
     """Getting last update info."""
+    print(data)
     results = data['result']
     total_updates = len(results) - 1
     return results[total_updates]
@@ -64,7 +65,7 @@ def main():
                get_message(last_update(get_updates_json(url))))
            checking_for_user(last_update(get_updates_json(url)))
            update_id += 1
-    sleep(1)
+    sleep(5)
 
 
 if __name__ == '__main__':
