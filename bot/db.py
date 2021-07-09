@@ -89,10 +89,6 @@ TelegramDB()
 db = sqlite3.connect('./db/telegram.db')
 cursor = db.cursor()
 
-def check_on_update(updateid):
-	"""Checking on a new message."""
-	pass
-
 def check_for_user(telegramid, username):
 	"""Checking for user status in database."""
 	users_list = cursor.execute('SELECT telegramid FROM user_instance')
@@ -115,8 +111,11 @@ def check_for_answer(telegramid): # TODO: Закончить метод.
 		f'SELECT lastquestionid FROM user_instance WHERE telegramid={telegramid}'
 		)
 
-
 def save_answer(telegramid, answer):
 	"""Saving answer into datebase."""
+	pass
+
+def check_on_update(updateid):
+	"""Checking on a new message."""
 	pass
 
