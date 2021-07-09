@@ -83,13 +83,32 @@ class TelegramDB():
 			print("connection closed")
 		self.con.close()
 
+	def check_for_user(self, telegramid, username):
+		"""Checking for user status in database."""
+		users_list = self.cursor.execute('SELECT telegramid FROM user_instance')
+		if str(telegramid) not in users_list:
+			self.save_user(telegramid, username)
+		else:
+			self.check_for_answer(telegramid)
 
-		# def save_user(self, telegramid):
-		# 	users_list = self.cursor.execute('SELECT * FROM user_instance')
-		# 	if telegramid not in users_list:
-		# 		self.cursor.execute('') #TODO
 
-		# def
+	def check_for_answer(self, telegramid): # TODO: Закончик метод.
+		"""Checking for last answer that user have answered."""
+		answer = self.cursor.execute(
+			f'SELECT lastquestionid FROM user_instance WHERE telegramid={telegramid}'
+			)
 
+
+	def save_answer(self, telegramid, answer):
+		"""Saving answer into datebase."""
+		pass
+
+	def save_user(self, telegramid, username):
+		"""Adding user into database."""
+		self.cursor.execute(
+			f'INSERT INTO user_instance VALUES (?, ?)',({telegramid}, {username})
+				) 
+		self.con.commit()
+		self.check_for_answer(telegramid) # asking user a question. 
 
 TelegramDB()

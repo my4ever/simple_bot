@@ -31,4 +31,9 @@ user_answer = '''CREATE TABLE IF NOT EXISTS user_answer(
 			    FOREIGN KEY (questionid) REFERENCES question (id)				
 				) '''
 
-CREATE_TABLES_LIST = [user_instance, question, answer, user_answer]
+update_id = '''CREATE TABLE IF NOT EXISTS update_id(
+			  id INTEGER NOT NULL,
+			  textid TEXT NOT NULL DEFAULT ""
+			  )'''
+
+CREATE_TABLES_LIST = [user_instance, question, answer, user_answer, update_id]
