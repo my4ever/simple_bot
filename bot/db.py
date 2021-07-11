@@ -23,7 +23,7 @@
 # # exit from sqlite shell
 # >>>.exit
 
-# updateid
+# updateid Done +
 # id int
 # textid txt
 
@@ -60,6 +60,7 @@
 
 import os
 import sqlite3
+from datetime import datetime as dt
 
 from sqlite_tables import CREATE_TABLES_LIST
 
@@ -78,44 +79,68 @@ class TelegramDB():
 								  f"WHERE type='table' AND name='{table}'").fetchall():
 				print("Its ok db exists")
 			else:
-				print(f"have to create Table {table}")
+				print(f"have to create Table: {table.split()[5].strip('(')}")
 				self.cursor.execute(table)
 			print("connection closed")
 		self.con.close()
 
 TelegramDB()
 
+def connect_to_db():
+	db = sqlite3.connect('./db/telegram.db')
+	cursor = db.cursor()
+	return db, cursor
 
-db = sqlite3.connect('./db/telegram.db')
-cursor = db.cursor()
-
-def check_for_user(telegramid, username):
+def check_for_user_db(telegramid, username):
 	"""Checking for user status in database."""
-	users_list = cursor.execute('SELECT telegramid FROM user_instance')
-	if str(telegramid) not in users_list:
-		save_user(telegramid, username)
+	db, cursor = connect_to_db()
+	users_list =  cursor.execute(
+		'SELECT telegramid FROM user_instance'
+		)
+	if telegramid not in [id[0] for id in users_list]:
+		save_user_db(telegramid, username)
 	else:
-		check_for_answer(telegramid)
+		check_for_question_db(telegramid)
 
-def save_user(telegramid, username):
+def save_user_db(telegramid, username):
 	"""Adding user into database."""
+	db, cursor = connect_to_db()
 	cursor.execute(
-		f'INSERT INTO user_instance VALUES (?, ?)',({telegramid}, {username})
+		'INSERT INTO user_instance '
+		'(telegramid, username, lastquestionid, regestrydate)'
+		f'VALUES("{telegramid}", "{username}", {1}, "{dt.now()}")'
 		) 
 	db.commit()
-	check_for_answer(telegramid) # asking user a question. 
+	check_for_question_db(telegramid) # asking user a question. 
 
-def check_for_answer(telegramid): # TODO: Закончить метод.
-	"""Checking for last answer that user have answered."""
-	answer = cursor.execute(
-		f'SELECT lastquestionid FROM user_instance WHERE telegramid={telegramid}'
-		)
+def check_for_question_db(telegramid):
+	"""Checking for question that user have not answered."""
+	db, cursor = connect_to_db()
+	question_id = cursor.execute(
+		'SELECT lastquestionid FROM user_instance '
+		f'WHERE telegramid={telegramid}'
+		).fetchone()[0]
+	send_question_db(question_id, telegramid)
 
-def save_answer(telegramid, answer):
+
+def send_question_db(question_id, telegramid):
+	"""Sending the question to the user."""
+	db, cursor = connect_to_db()
+	question = cursor.execute(
+		'SELECT text FROM question '
+		f'WHERE id={1}'
+		).fetchone()[0]
+	return question
+
+
+def save_answer_db(telegramid, answer):
 	"""Saving answer into datebase."""
 	pass
 
-def check_on_update(updateid):
+def check_on_update_db(updateid):
 	"""Checking on a new message."""
+	upadete = cursour.execute(
+			'SELECT '
+		)
 	pass
 

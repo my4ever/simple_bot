@@ -1,5 +1,8 @@
 import requests
+
 from time import sleep
+
+from db import check_for_user_db, send_question_db
 
 TOKEN = None
 with open('/home/ruslan/Dev/simple_projects/simple_bot/.env', 'r') as token:
@@ -16,7 +19,6 @@ def get_updates_json(request):
 
 def last_update(data):
     """Getting last update info."""
-    print(data)
     results = data['result']
     total_updates = len(results) - 1
     return results[total_updates]
@@ -33,9 +35,15 @@ def get_message(update):
     message = update['message']['text']
     return message
 
+def get_telegramid(update):
+    """Getting user id."""
+    telegramid = str(update['message']['from']['id'])
+    return telegramid
+
 
 def send_message(chat, text):
     """Sending the message."""
+    text = send_question_db()
     params = {'chat_id': chat, 'text': text}
     response = requests.post(url + 'sendMessage', data=params)
     return response
@@ -43,18 +51,9 @@ def send_message(chat, text):
 
 def checking_for_user(update):
     """Checking for username in database."""
+    telegramid = get_telegramid(update)
     username = update['message']['from']['username']
-    with open('db.txt', 'r') as database:
-        names = [name for name in database]
-        if username not in names:
-            add_user_to_db(username)
-
-
-def add_user_to_db(username):
-    """Adding username into database."""
-    with open('db.txt', 'a') as database:
-        database.write('\n' + username)
-
+    check_for_user_db(telegramid, username)
 
 def main():
     update_id = last_update(get_updates_json(url))['update_id']
