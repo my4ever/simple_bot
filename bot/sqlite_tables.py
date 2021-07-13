@@ -32,7 +32,7 @@ user_answer = '''CREATE TABLE IF NOT EXISTS user_answer(
 				) '''
 
 update_id = '''CREATE TABLE IF NOT EXISTS update_id(
-			  id INTEGER NOT NULL,
+			  id INTEGER PRIMARY KEY,
 			  textid TEXT NOT NULL DEFAULT ""
 			  )'''
 
