@@ -6,6 +6,7 @@ user_instance = ''' CREATE TABLE IF NOT EXISTS user_instance(
 				    isadmin INTEGER DEFAULT 0,
 				    regestrydate TEXT DEFAULT  "",
 				    lastquestionid INTEGER NOT NULL,
+				    attempts INTEGER DEFAULT 0,
 				    FOREIGN KEY (lastquestionid) REFERENCES question (id)
 				    ) '''
 

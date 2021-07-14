@@ -101,11 +101,6 @@ def check_for_user_db(telegramid, username):
 		f'WHERE telegramid="{telegramid}"'
 		).fetchone()
 	return user_instance
-
-	# if users_list:
-	# 	check_for_question_db(telegramid)
-	# else:
-	# 	save_user_db(telegramid, username)
 	
 def save_user_db(telegramid, username):
 	"""Adding user into database."""
@@ -117,31 +112,13 @@ def save_user_db(telegramid, username):
 	cursor.execute(SQL, VALUES)
 	db.commit()
 
-	# check_for_question_db(telegramid) # asking user a question. 
-
-def check_for_question_db(telegramid):
-	"""Checking for question that user have not answered."""
+def check_last_updateid_db():
+	"""Check for las update id."""
 	db, cursor = connect_to_db()
-	question_id = cursor.execute(
-		'SELECT lastquestionid FROM user_instance '
-		f'WHERE telegramid="{telegramid}"'
-		).fetchone()[0]
-	return question_id
-
-	# send_question_db(question_id, telegramid)
-
-def look_for_question_db(telegramid, question_id):
-	"""Sending the question to the user."""
-	db, cursor = connect_to_db()
-	question = cursor.execute(
-		'SELECT text FROM question '
-		f'WHERE id="{question_id}"'
-		).fetchone()[0]
-	return question
-
-def save_answer_db(telegramid, answer):
-	"""Saving answer into datebase."""
-	pass
+	updateid = cursor.execute(
+		"""SELECT textid FROM update_id"""
+		).fetchall()[-1][0].strip()
+	return updateid
 
 def check_on_update_db(updateid):
 	"""Checking on a new message."""
@@ -161,6 +138,62 @@ def add_update_id_db(updateid):
 	cursor.execute(SQL, [VALUES])
 	db.commit()
 
+def check_for_questionid_db(telegramid):
+	"""Checking for question that user have not answered."""
+	db, cursor = connect_to_db()
+	question_id = cursor.execute(
+		'SELECT lastquestionid FROM user_instance '
+		f'WHERE telegramid="{telegramid}"'
+		).fetchone()[0]
+	return question_id
+
+def look_for_question_db(telegramid, question_id):
+	"""Sending the question to the user."""
+	db, cursor = connect_to_db()
+	question = cursor.execute(
+		'SELECT text FROM question '
+		f'WHERE id="{question_id}"'
+		).fetchone()[0]
+	return question
+
+def get_variants_of_answers_db(question_id):
+	"""Getting variant of annwers."""
+	db, cursor = connect_to_db()
+	answers = cursor.execute(
+		'SELECT text FROM answer '
+		f'WHERE questionid="{question_id}"'
+		).fetchall()
+	return [answer[0] for answer in answers]
+
+def get_answer_id_db(answer):
+	"""Getting answer id."""
+	db, cursor = connect_to_db()
+	answer_id = cursor.execute(
+		'SELECT id FROM answer '
+		f'WHERE text="{answer}"'
+		).fetchone()[0]
+	return answer_id
+
+def save_answer_db(telegramid, question_id, answer_id):
+	"""Saving answer into datebase."""
+	db, cursor = connect_to_db()
+	SQL = """INSERT INTO user_answer
+			 (userid, answerid, questionid) 
+			 VALUES(?, ?, ?)"""
+	VALUES =(telegramid, answer_id, question_id)
+	cursor.execute(SQL, VALUES)
+	db.commit()
+
+def update_questionid_userinstance_db(telegramid, question_id):
+	"""Updating questionid in user instance"""
+	db, cursor = connect_to_db()
+	cursor.execute(
+		'UPDATE user_instance '
+		f'SET lastquestionid="{question_id + 1}" '
+		f'WHERE telegramid="{telegramid}"'
+		)
+	db.commit()
+
 def add_question_db(text):
 	db, cursor = connect_to_db()
 	SQL = """INSERT INTO question
@@ -169,3 +202,13 @@ def add_question_db(text):
 	VALUES = text 
 	cursor.execute(SQL, VALUES)
 	cursor.commit()		 
+
+def get_amout_of_questions_db():
+	"""Geting the amount of questions."""
+	db, cursor = connect_to_db()
+	amount = cursor.execute(
+		"""SELECT id FROM question
+		   ORDER BY id DESC
+		   LIMIT 1"""
+		).fetchone()[0]
+	return amount
