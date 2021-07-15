@@ -147,7 +147,7 @@ def check_for_questionid_db(telegramid):
 		).fetchone()[0]
 	return question_id
 
-def look_for_question_db(telegramid, question_id):
+def look_for_question_db(question_id):
 	"""Sending the question to the user."""
 	db, cursor = connect_to_db()
 	question = cursor.execute(
@@ -155,6 +155,24 @@ def look_for_question_db(telegramid, question_id):
 		f'WHERE id="{question_id}"'
 		).fetchone()[0]
 	return question
+
+def get_attempt(telegramid):
+	"""Getting amout of attempts."""
+	db, cursor = connect_to_db()
+	attempts = cursor.execute(
+		'SELECT attempts FROM user_instance '
+		f'WHERE telegramid="{telegramid}"'
+		).fetchone()[0]
+	return attempts
+
+def add_attempt(telegramid, attempt):
+	db, cursor = connect_to_db()
+	cursor.execute(
+		'UPDATE user_instance '
+		f'SET attempts="{attempt+ 1}" '
+		f'WHERE telegramid="{telegramid}"'
+		)
+	db.commit()
 
 def get_variants_of_answers_db(question_id):
 	"""Getting variant of annwers."""
@@ -189,19 +207,10 @@ def update_questionid_userinstance_db(telegramid, question_id):
 	db, cursor = connect_to_db()
 	cursor.execute(
 		'UPDATE user_instance '
-		f'SET lastquestionid="{question_id + 1}" '
+		f'SET lastquestionid="{question_id + 1}", attempts="{0}" '
 		f'WHERE telegramid="{telegramid}"'
 		)
 	db.commit()
-
-def add_question_db(text):
-	db, cursor = connect_to_db()
-	SQL = """INSERT INTO question
-			 (text) 
-			 VALUES(?)"""
-	VALUES = text 
-	cursor.execute(SQL, VALUES)
-	cursor.commit()		 
 
 def get_amout_of_questions_db():
 	"""Geting the amount of questions."""
@@ -212,3 +221,12 @@ def get_amout_of_questions_db():
 		   LIMIT 1"""
 		).fetchone()[0]
 	return amount
+
+# def add_question_db(text):
+# 	db, cursor = connect_to_db()
+# 	SQL = """INSERT INTO question
+# 			 (text) 
+# 			 VALUES(?)"""
+# 	VALUES = text 
+# 	cursor.execute(SQL, VALUES)
+# 	cursor.commit()		 
