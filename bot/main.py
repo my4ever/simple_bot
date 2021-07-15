@@ -4,7 +4,7 @@ import bot
 import db
 
 final_respose = "Спасибо, вопросов больше нет."
-attemps_allowed = 2  # attempts
+attempts_allowed = 2  # attempts
 
 
 def create_massage(telegram_id):
@@ -12,7 +12,7 @@ def create_massage(telegram_id):
     question_id = db.check_for_questionid_db(telegram_id)
     if question_id <= db.get_amout_of_questions_db():
         question = db.look_for_question_db(question_id)
-        if db.get_attempt(telegram_id) > attemps_allowed:
+        if db.get_attempt(telegram_id) > attempts_allowed:
             return question.upper()
         return question
     return final_respose
@@ -26,7 +26,9 @@ def main():
         update_id = db.check_last_updateid_db()
     while True:
         if int(update_id) != bot.last_update(data)['update_id']:
-            print('We have a new massages!')
+            print(f'We have a new massage!\n'
+                  f'from: {bot.get_username(bot.last_update(data))} \n'
+                  f'id: {bot.get_telegramid(bot.last_update(data))}')
             for message in data['result']:
                 message_id = str(message['update_id'])
                 if db.check_on_update_db(message_id) is None:
