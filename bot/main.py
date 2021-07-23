@@ -3,7 +3,7 @@ import db
 
 from time import sleep
 
-final_respose = "Спасибо, вопросов больше нет."
+final_response = "Спасибо, вопросов больше нет."
 attempts_allowed = 2  # attempts
 
 
@@ -15,7 +15,7 @@ def create_massage(telegram_id):
         if db.get_attempt(telegram_id) > attempts_allowed:
             return question.upper()
         return question
-    return final_respose
+    return final_response
 
 
 def main():
