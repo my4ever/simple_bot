@@ -19,7 +19,7 @@ def last_update(data):
     return results[total_updates]
 
 def check_update_id(data):
-    """Checking for updateid in DB."""
+    """Checking for update id in DB."""
     results = data['result']
     for i in results:
         update_id = str(i['update_id'])
