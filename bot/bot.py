@@ -5,9 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
-# with open('/home/ruslan/Dev/simple_projects/simple_bot/.env', 'r') as token:
-#     for i in token:
-#         TOKEN = str(i)
 url = f'https://api.telegram.org/bot{TOKEN}/'
 
 
