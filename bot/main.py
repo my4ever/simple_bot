@@ -1,7 +1,7 @@
-from time import sleep
-
 import bot
 import db
+
+from time import sleep
 
 final_respose = "Спасибо, вопросов больше нет."
 attempts_allowed = 2  # attempts

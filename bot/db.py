@@ -56,12 +56,11 @@
 # 						   записываем айди след. вопроса
 # 						   оправляем след вопрос
 # 						   если ответ не верный - оправляем повторно вопрос Capitalize
-
-
 import os
-import sqlite3
-from datetime import datetime as dt
 
+import sqlite3
+
+from datetime import datetime as dt
 from sqlite_tables import CREATE_TABLES_LIST
 
 
