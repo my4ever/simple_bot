@@ -133,5 +133,4 @@ dmypy.json
 .env/
 
 # Database
-bot/db/ 
-bot/db.txt
+bot/db/telegram.db
