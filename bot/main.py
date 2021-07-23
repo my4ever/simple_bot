@@ -58,10 +58,11 @@ def main():
                     # sending massage
                     chat_id = bot.get_chat_id(message)
                     question = create_massage(telegram_id)
-                    bot.send_message(chat_id, question)
-                    for i in answers:
-                        bot.send_message(chat_id, i.capitalize())
-                    # setting new update id
+                    # creating a message body
+                    question_and_variants = question + "\n" + "\n".join(
+                        i.capitalize() for i in answers
+                    )
+                    bot.send_message(chat_id, question_and_variants)
                     update_id = db.check_last_updateid_db()
         else:
 
