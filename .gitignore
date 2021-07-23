@@ -103,7 +103,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+bot/.env
 .venv
 env/
 venv/
@@ -130,7 +130,7 @@ dmypy.json
 .pyre/
 
 # Bot`s token
-.env/
+bot/.env/
 
 # Database
 db/
