@@ -222,10 +222,11 @@ def get_amout_of_questions_db():
 	return amount
 
 # def add_question_db(text):
+# 	"""Adding question into database."""
 # 	db, cursor = connect_to_db()
 # 	SQL = """INSERT INTO question
-# 			 (text) 
+# 			 (text)
 # 			 VALUES(?)"""
-# 	VALUES = text 
+# 	VALUES = text
 # 	cursor.execute(SQL, VALUES)
-# 	cursor.commit()		 
+# 	cursor.commit()
