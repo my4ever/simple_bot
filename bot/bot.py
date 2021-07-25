@@ -3,7 +3,6 @@ import os
 import requests
 
 from dotenv import load_dotenv
-
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN_TELEGRAM_BOT')
